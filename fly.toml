@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for kicksdude-shopify-webhooks on 2023-06-24T19:30:26Z
+# fly.toml app configuration file generated for kicksdude-shopify-webhooks on 2023-06-25T04:51:28Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -7,7 +7,7 @@ app = "kicksdude-shopify-webhooks"
 primary_region = "lhr"
 
 [http_service]
-  internal_port = 3000
+  internal_port = 8080
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true
