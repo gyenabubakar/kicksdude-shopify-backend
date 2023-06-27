@@ -1,16 +1,22 @@
-import '@shopify/shopify-api/adapters/node';
-import { shopifyApi, LATEST_API_VERSION } from '@shopify/shopify-api';
+import axios from 'axios';
+import type { Order } from '../types';
+const LATEST_API_VERSION = '2023-04';
 
-const { SHOPIFY_API_KEY, SHOPIFY_API_SECRET, HOST } = process.env as Record<string, string>;
+axios.defaults.baseURL = `https://${process.env.SHOPIFY_STORE_DOMAIN}/admin/api/${LATEST_API_VERSION}/`;
+axios.defaults.headers.common['X-Shopify-Access-Token'] = process.env.SHOPIFY_API_ACCESS_TOKEN;
 
-const Shopify = shopifyApi({
-  // The next 4 values are typically read from environment variables for added security
-  apiKey: SHOPIFY_API_KEY,
-  apiSecretKey: SHOPIFY_API_SECRET,
-  hostName: HOST,
-  scopes: ['read_products', 'write_products'],
-  apiVersion: LATEST_API_VERSION,
-  isEmbeddedApp: true,
-});
+async function getOrder(id: number, fields: string[] = []) {
+  const response = await axios.get(`orders/${id}.json`, {
+    params: {
+      fields: fields.join(','),
+      status: 'any',
+    },
+  });
+  return response.data.order as Partial<Order>;
+}
 
-export default Shopify;
+const ShopifyAPI = {
+  getOrder,
+};
+
+export default ShopifyAPI;
